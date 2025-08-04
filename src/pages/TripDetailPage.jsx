@@ -55,7 +55,7 @@ export default function TripDetailPage() {
   /* ────────── Trip detail content ────────── */
   return (
     <div className="p-6 pt-12 md:pt-6 overflow-auto relative">
-
+      
       {/* Trip title with city and country */}
       <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Abril Fatface, cursive' }}>
         {trip.city}, {trip.country}

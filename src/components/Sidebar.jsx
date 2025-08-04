@@ -22,7 +22,7 @@
  */
 
 // src/components/Sidebar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 /**
@@ -40,6 +40,30 @@ export default function Sidebar() {
   const { id } = useParams(); // Extract trip ID from URL for trip-specific navigation
   const [open, setOpen] = useState(false); // Mobile menu toggle state
 
+  // Prevent body scroll when menu is open on mobile
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    // Handle escape key to close menu
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && open) {
+        setOpen(false);
+      }
+    };
+    
+    document.addEventListener('keydown', handleEscape);
+    
+    // Cleanup function to reset overflow when component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [open]);
+
   /**
    * Handles user logout by clearing authentication token and redirecting to start page
    */
@@ -53,19 +77,20 @@ export default function Sidebar() {
     <>
       {/* Burger button for mobile screens - hamburger menu icon */}
       <button
-        className="fixed top-4 left-4 z-60 flex flex-col justify-center items-center w-10 h-10 bg-gray-200 rounded md:hidden"
+        className="fixed top-4 left-4 z-[60] flex flex-col justify-center items-center w-10 h-10 bg-gray-200 rounded md:hidden shadow-lg"
         onClick={() => setOpen(!open)}
-        aria-label="Open menu"
+        aria-label={open ? "Close menu" : "Open menu"}
+        style={{ touchAction: 'manipulation' }}
       >
         {/* Animated hamburger icon lines */}
-        <span className={`block w-6 h-0.5 bg-black mb-1 transition-transform ${open ? 'rotate-45 translate-y-2' : ''}`}></span>
-        <span className={`block w-6 h-0.5 bg-black mb-1 ${open ? 'opacity-0' : ''}`}></span>
-        <span className={`block w-6 h-0.5 bg-black transition-transform ${open ? '-rotate-45 -translate-y-2' : ''}`}></span>
+        <span className={`block w-6 h-0.5 bg-black transition-all duration-300 ${open ? 'rotate-45 translate-y-1.5' : 'mb-1'}`}></span>
+        <span className={`block w-6 h-0.5 bg-black transition-all duration-300 ${open ? 'opacity-0' : 'mb-1'}`}></span>
+        <span className={`block w-6 h-0.5 bg-black transition-all duration-300 ${open ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
       </button>
 
       {/* Main sidebar navigation */}
       <nav
-        className={`fixed top-0 left-0 h-full w-64 bg-white p-4 shrink-0 flex flex-col justify-between z-50 transition-transform duration-300 md:static md:translate-x-0 md:flex md:h-full ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+        className={`fixed top-0 left-0 h-full w-64 bg-white p-4 shrink-0 flex flex-col justify-between z-[50] transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : '-translate-x-full'} md:static md:translate-x-0 md:z-auto`}
         style={{ minHeight: '100vh' }}
       >
         <div>
@@ -95,8 +120,9 @@ export default function Sidebar() {
       {/* Mobile overlay - closes menu when clicked outside */}
       {open && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-[40] md:hidden"
           onClick={() => setOpen(false)}
+          aria-hidden="true"
         ></div>
       )}
     </>
