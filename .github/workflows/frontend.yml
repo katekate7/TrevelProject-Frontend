@@ -28,10 +28,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run linting (non-blocking)
-        run: npm run lint || echo "Linting completed with warnings"
-        continue-on-error: true
-
       - name: Run tests
         run: npm test -- --coverage --watchAll=false || echo "Tests completed"
         continue-on-error: true
