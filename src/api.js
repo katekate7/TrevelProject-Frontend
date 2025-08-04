@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Use direct backend URL instead of proxy
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'http://localhost:8000/api',
   withCredentials: true,
   // Add this to handle self-signed certificates
   httpsAgent: process.env.NODE_ENV === 'development' ? null : undefined,
@@ -11,10 +11,11 @@ const api = axios.create({
 // Add request interceptor to include JWT token in Authorization header
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jwt_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // Remove Authorization header logic - rely on cookies instead
+    // const token = localStorage.getItem('jwt_token');
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
     return config;
   },
   (error) => Promise.reject(error)
@@ -25,8 +26,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear invalid token and redirect to login
-      localStorage.removeItem('jwt_token');
+      // Clear any authentication state and redirect to login
+      // Note: JWT token is stored in HTTP-only cookies, not localStorage
       console.log('401 Unauthorized - clearing authentication state');
       // Only redirect if not already on login page
       if (!window.location.pathname.includes('/start') && !window.location.pathname.includes('/login')) {

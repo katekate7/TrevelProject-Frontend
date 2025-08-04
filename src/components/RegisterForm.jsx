@@ -66,10 +66,8 @@ export default function RegisterForm({ onNeedLogin }) {
       // Automatically log in the newly registered user
       const loginResponse = await api.post('/login', { email, password });
       
-      // Store the JWT token if provided - CRITICAL FOR SECURITY
-      if (loginResponse.data.token) {
-        localStorage.setItem('jwt_token', loginResponse.data.token);
-      }
+      // JWT token is automatically stored in HTTP-only cookie by the backend
+      // No need to manually store it in localStorage
 
       // Redirect to dashboard on successful registration and login
       navigate('/dashboard');

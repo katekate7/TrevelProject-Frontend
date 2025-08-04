@@ -22,10 +22,8 @@ export default function LoginForm({ onNeedRegister, onForgotPassword }) {
     try {
       const loginResponse = await api.post('/login', { email, password });
       
-      // Store the JWT token if provided
-      if (loginResponse.data.token) {
-        localStorage.setItem('jwt_token', loginResponse.data.token);
-      }
+      // JWT token is automatically stored in HTTP-only cookie by the backend
+      // No need to manually store it in localStorage
       
       // Only try to get user data if login was successful
       if (loginResponse.status === 200) {
