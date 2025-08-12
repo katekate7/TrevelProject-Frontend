@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        // Тепер у класах можна писати "font-abril"
+        // write "font-abril"
         abril: ["Abril Fatface", "cursive"],
       },
     },

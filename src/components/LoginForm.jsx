@@ -91,7 +91,7 @@ export default function LoginForm({ onNeedRegister, onForgotPassword }) {
         <p className="text-center text-sm text-red-600">{message}</p>
       )}
 
-      {/* Links (без чорного фону) */}
+      {/* Links */}
       <div className=" flex flex-col text-sm text-black">
         <span className="flex flex-row">
           Don’t have an account?{' '}
